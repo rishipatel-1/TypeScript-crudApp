@@ -36,6 +36,7 @@ class Details {
     const image: Image = {
       name: file.name,
       type: file.type,
+
       size: file.size
     };
 
@@ -213,7 +214,7 @@ function OnClose(): void {
 
 
 function deleteProduct(indx: number): void {
-  let array: any[] = JSON.parse(localStorage.getItem("data")!) ?? [];
+  let array: Product[] = JSON.parse(localStorage.getItem("data")!) ?? [];
   array = array.filter((ele) => indx !== ele.product_id);
 
   localStorage.setItem("data", JSON.stringify(array));
@@ -221,26 +222,33 @@ function deleteProduct(indx: number): void {
 }
 
 function updateProduct(pid: number): void {
-  let array: any[] = JSON.parse(localStorage.getItem("data")!) ?? [];
+  let array: Product[] = JSON.parse(localStorage.getItem("data")!) ?? [];
   const elem = array.filter((ele) => pid === ele.product_id);
 
   (document.getElementById("update-productName") as HTMLInputElement).value = elem[0].ProductName;
   (document.getElementById("update-productPrice") as HTMLInputElement).value = elem[0].ProductPrice;
   (document.getElementById('update-description') as HTMLInputElement).value = elem[0].description;
-  (document.getElementById('hiddentproductid') as HTMLInputElement).value = elem[0].product_id;
+  (document.getElementById('hiddentproductid') as HTMLInputElement).value = elem[0].product_id.toString();
 }
+
+
+
 
 async function updateData(): Promise<void> {
   const id = (document.getElementById('hiddentproductid') as HTMLInputElement).value
 
   let imagess: string | null = null;
-
-  if ((document.getElementById('Image') as HTMLFormElement).files[0]) {
-    imagess = await details.imageToBase64((document.getElementById('Image') as HTMLFormElement).files[0]);
+  console.log((document.getElementById('update-Image') as HTMLFormElement).files[0]);
+  
+  if ((document.getElementById('update-Image') as HTMLFormElement).files[0]) {
+    imagess = await details.imageToBase64((document.getElementById('update-Image') as HTMLFormElement).files[0]);
+    console.log(imagess);
+    
+    
   }
-  let array: any[] = JSON.parse(localStorage.getItem("data")!) ?? [];
+  let array: Product[] = JSON.parse(localStorage.getItem("data")!) ?? [];
   array = array.map((ele) => {
-    const formData: any = {}
+    const formData:object = {}
     if (ele.product_id === parseInt(id)) {
 
       if (imagess !== null) {
@@ -256,12 +264,18 @@ async function updateData(): Promise<void> {
 
   
   localStorage.setItem("data", JSON.stringify(array));
+  
   displayData();
+  (document.querySelector("#closebtn2") as HTMLElement).click();
 }
+  
+
+
+
 
 function FilterItems(filterValue: string): void {
   
-    let Filtereditems: any[];
+    let Filtereditems: Product[];
     const products = JSON.parse(localStorage.getItem("data")!) ?? [];
     if (filterValue == '' || filterValue == 'all') {
       Filtereditems = products;
@@ -275,7 +289,7 @@ function FilterItems(filterValue: string): void {
 function searchProducts(): void {
   const search_val = (document.querySelector('#serachProductText') as HTMLInputElement).value;
 
-  let sortedItem: any[] = [];
+  let sortedItem: Product[] = [];
   const products = JSON.parse(localStorage.getItem("data")!) ?? [];
   const regex = new RegExp(search_val, "i")
   for (let element of products) {
@@ -288,7 +302,7 @@ function searchProducts(): void {
   displayData1(sortedItem);
 }
 
-const select = document.getElementById('hiddentproductid') as HTMLSelectElement;
+const select:HTMLSelectElement = document.getElementById('hiddentproductid') as HTMLSelectElement;
 document.querySelector('#filter-select-input')!.addEventListener('input', filterproduct)
 
 function filterproduct(): void {
@@ -337,279 +351,3 @@ function filterproduct(): void {
               
               
 
-
-// interface HTMLInputEvent extends Event {
-//     target: HTMLInputElement & EventTarget;
-//   }
-  
-//   interface CompressedImage extends Blob {
-//     name: string;
-//   }
-  
-//   const NewDetail: HTMLFormElement = document.getElementById('addFormDetails') as HTMLFormElement;
-  
-//   const compressImageFunc = (image: any): Promise<CompressedImage> => {
-//     return new Promise<CompressedImage>((resolve, reject) => {
-//       const canvas = document.createElement("canvas");
-//       const ctx = canvas.getContext("2d")!;
-  
-//       const img = new Image();
-//       img.onload = () => {
-//         const MAX_WIDTH = 800;
-//         const MAX_HEIGHT = 600;
-
-//         let width = img.width;
-//         let height = img.height;
-  
-//         if (width > height) {
-//           if (width > MAX_WIDTH) {
-//             height *= MAX_WIDTH / width;
-//             width = MAX_WIDTH;
-//           }
-//         } else {
-//           if (height > MAX_HEIGHT) {
-//             width *= MAX_HEIGHT / height;
-//             height = MAX_HEIGHT;
-//           }
-//         }
-  
-//         canvas.width = width;
-//         canvas.height = height;
-  
-//         ctx.drawImage(img, 0, 0, width, height);
-  
-//         canvas.toBlob((blob) => {
-//           const compressedImage = blob as CompressedImage;
-//           compressedImage.name = image.name;
-//           resolve(compressedImage);
-//         }, "image/jpeg", 0.7);
-//       };
-  
-//       img.onerror = (error) => {
-//         reject(error);
-//       };
-  
-//       img.src = URL.createObjectURL(image);
-//     });
-//   };
-  
-//   const ImagetoBase64 = (file: File): Promise<string> => {
-//     return new Promise<string>((resolve, reject) => {
-//       const fileReader = new FileReader();
-//       fileReader.readAsArrayBuffer(file);
-  
-//       fileReader.onload = async () => {
-//         const compressedImage = await compressImageFunc(new Blob([String(fileReader.result)], { type: file.type })) as File;
-//         const compressedFileReader = new FileReader();
-//         compressedFileReader.readAsDataURL(compressedImage);
-  
-//         compressedFileReader.onload = () => {
-//           resolve(compressedFileReader.result as string);
-//         };
-  
-//         compressedFileReader.onerror = (error) => {
-//           reject(error);
-//         };
-//       };
-  
-//       fileReader.onerror = (error) => {
-//         reject(error);
-//       };
-//     });
-//   };
-  
-
-//   interface Product {
-//     productId: number;
-//     productName: string;
-//     productPrice: number;
-//     image: string;
-//     description: string;
-//   }
-  
-//   class ProductManager {
-//     private static array: Product[] = [];
-  
-//     static readFormData = async () => {
-//       let array = JSON.parse(localStorage.getItem("data")!) ?? [];
-//       let formData: Product = {
-//         productId: Math.floor(Math.random() * 1000),
-//         productName: (document.getElementById("productName") as HTMLInputElement).value,
-//         productPrice: parseFloat((document.getElementById("productPrice") as HTMLInputElement).value),
-//         image: await ImagetoBase64((document.getElementById("Image") as HTMLFormElement).files[0]),
-
-//         description: (document.getElementById("description") as HTMLInputElement).value,
-//       };
-  
-//       this.array.push(formData);
-//       localStorage.setItem("data", JSON.stringify(this.array));
-//       this.displayData();
-//       (document.querySelector("#closebtn") as HTMLElement).click();
-
-//     };
-  
-//   static displayData = (): void => {
-//       let obj: Product[] = JSON.parse(localStorage.getItem("data")!) ?? [];
-//       let data = "";
-//       let filterData = '<option class="text-dark" value="all">ALL</option>';
-  
-//       obj.forEach((product) => {
-//         data += `
-//           <div class="card m-2 col-lg-3 col-md-6 col-sm-12 col-8">
-//             <img class="card-img-top mt-3" src="${product.image}" alt="Card image cap" style="width:100%; height:100%">
-//             <div class="card-body">
-//               <h5 class="card-title Card-text mt-3">${product.productName}</h5>
-//               <p class="card-text Card-text mt-3"> ${product.productPrice}</p>
-//               <p class="card-text Card-text">${product.description}</p>
-//               <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#update-product-modal" onclick="updateProduct(${product.productId})">update</button>
-//               <button class="btn-danger btn" onclick="deleteProduct(${product.productId})">Delete</button>
-//             </div>
-//           </div>
-//         `;
-  
-//         filterData += `<option class="text-dark" value="${product.productId}">${product.productId}(${product.productName})</option>`;
-//       });
-  
-//       document.getElementById("filter-select-input")!.innerHTML = filterData;
-//       document.getElementById("products-display")!.innerHTML = data;
-//     };
-//   }
-  
-//   class ProductDisplay {
-//     static displayData1(products): string {
-//       let data = "";
-//       products.forEach((product) => {
-//         data += `
-//           <div class="card m-2 col-lg-3 col-md-6 col-sm-12">
-//             <div class="card-body">
-//               <h5 class="card-title">${product.productName}</h5>
-//               <p class="card-text">Price: ${product.productPrice}</p>
-//             </div>
-//           </div>
-//         `;
-//       });
-//       return data;
-//     }
-//   }
-  
-//   function OnClose(): void {
-//     NewDetail.reset();
-//   }
-  
-//   function deleteProduct(productId: number): void {
-//     let array: Product[] = JSON.parse(localStorage.getItem("data")!) ?? [];
-//     array = array.filter((product) => productId !== product.productId);
-//     localStorage.setItem("data", JSON.stringify(array));
-//     ProductManager.displayData();
-//   }
-  
-//   function updateProduct(productId: number): void {
-//     let array: Product[] = JSON.parse(localStorage.getItem("data")!) ?? [];
-//     const elem = array.find((product) => productId === product.productId);
-  
-//     if (elem) {
-//       (document.getElementById("update-productName") as HTMLInputElement).value
-  
-
-//       interface productUpdate {
-//         productId: number;
-//         name: string;
-//         price: number;
-//         image: string;
-//         description: string;
-//       }
-      
-//       class ProductService {
-
-//         static async updateData() {
-          
-       
-
-//           const idInput = document.getElementById('hiddentproductid') as HTMLInputElement;
-//           const id = idInput?.value;
-      
-//           const fileInput = document.getElementById('update-Image') as HTMLInputElement;
-//           let imagess: string[] = [];
-      
-//           if (fileInput?.files && fileInput.files.length > 0) {
-//             const file = fileInput.files[0];
-//             const imageBase64 = await ImagetoBase64(file);
-//             imagess.push(imageBase64);
-//           }
-      
-//           let array: productUpdate[] = JSON.parse(localStorage.getItem('data')!) ?? [];
-//           array = array.map((ele) => {
-//             const formData: productUpdate = {
-//               productId: ele.productId,
-//               name: ele.name,
-//               price: ele.price,
-//               image: ele.image,
-//               description: ele.description,
-//             };
-//             if (ele.productId === parseInt(id!)) {
-//               if (imagess.length > 0) {
-//                 formData.image = imagess[0];
-//               }
-//               formData.name = (document.getElementById('update-productName') as HTMLInputElement).value;
-//               formData.price = parseInt((document.getElementById('update-productPrice') as HTMLInputElement).value);
-//               formData.description = (document.getElementById('update-description') as HTMLInputElement).value;
-//             }
-//             return formData;
-//           });
-      
-//           localStorage.setItem('data', JSON.stringify(array));
-//           ProductManager.displayData();
-//         }
-      
-//         static searchProducts() {
-        
-//           const search_val = (document.querySelector('#serachProductText') as HTMLInputElement).value;
-      
-//           let sortedItem: productUpdate[] = [];
-//           let products: productUpdate[] = JSON.parse(localStorage.getItem('data')!) ?? [];
-//           let regex = new RegExp(search_val, 'i');
-//           for (let element of products) {
-//             const item = element;
-//             if (regex.test(item.name)) {
-//               sortedItem.push(element);
-//             }
-//           }
-//          ProductDisplay.displayData1(sortedItem)
-         
-//         }
-      
-//         static filterProduct() {
-//           const filterinput = document.querySelector('#filter-select-input') as HTMLInputElement;
-//           const filter = filterinput.value.toLowerCase();
-//           const listitem = document.querySelectorAll('.filter-select-input');
-//           listitem.forEach((item) => {
-//             let text = item.textContent;
-//             if (text!.toLowerCase().indexOf(filter.toLowerCase())) {
-//               (item as HTMLElement).style.display = '';
-//             } else {
-//               (item as HTMLElement).style.display = 'none';
-//             }
-//           });
-//         }
-      
-//         static sortItems(value: string) {
-          
-//           let sortItems: productUpdate[] = JSON.parse(localStorage.getItem('data')!) ?? [];
-      
-//           if (value === 'name') {
-//             sortItems = sortItems.sort((a, b) => a.name.localeCompare(b.name));
-//           } else if (value === 'productId') {
-//             sortItems = sortItems.sort((a, b) => a.productId - b.productId);
-//           } else if (value === 'hl') {
-//             sortItems = sortItems.sort((a, b) => b.price - a.price);
-//           } else {
-//             sortItems = sortItems.sort((a, b) => a.price - b.price);
-//           }
-      
-//           localStorage.setItem('data', JSON.stringify(sortItems));
-//           ProductDisplay.displayData1(sortItems);
-          
-//         }
-//       }
-//     }
-//   }

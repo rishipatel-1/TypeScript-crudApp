@@ -42,17 +42,17 @@
 
                             </div>
                             <div class="form-group col-12 mb-5">
-                                <label class="popup-text" for="name">Price</label>
+                                <label class="popup-text" for="price">Price</label>
                                 <input type="number" class="form-control" id="productPrice" required>
 
                             </div>
                             <div class="form-group col-12 mb-5">
-                                <label class="popup-text" for="name">Image Picture</label>
+                                <label class="popup-text" for="image">Image Picture</label>
                                 <input type="file" class="form-control formImage" id="Image" required>
 
                             </div>
                             <div class="form-group col-12 mb-5">
-                                <label class="popup-text" for="name">Description</label>
+                                <label class="popup-text" for="description">Description</label>
                                 <input type="text" class="form-control" id="description" required>
 
                             </div>
@@ -76,7 +76,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title popup-text fs-5" id="add-new-product-modal-label" onclick="readformData()">
-                        Add New Product</h1>
+                        Update Product</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -91,17 +91,17 @@
 
                             </div>
                             <div class="form-group col-12 mb-5">
-                                <label class="popup-text" for="name">Price</label>
+                                <label class="popup-text" for="price">Price</label>
                                 <input type="number" class="form-control" id="update-productPrice" required>
 
                             </div>
                             <div class="form-group col-12 mb-5">
-                                <label class="popup-text" for="name">Image Picture</label>
+                                <label class="popup-text" for="image">Image Picture</label>
                                 <input type="file" class="form-control" id="update-Image">
 
                             </div>
                             <div class="form-group col-12 mb-5">
-                                <label class="popup-text" for="name">Description</label>
+                                <label class="popup-text" for="description">Description</label>
                                 <input type="text" class="form-control" id="update-description" required>
 
                             </div>
@@ -109,8 +109,8 @@
                     </form>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            onclick="ClearInput()">Close</button>
-                        <button type="submit" class="btn btn-primary" onclick="updateData()">update Product</button>
+                        id="closebtn2">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="updateData()">update Product</button>
                     </div>
                 </div>
 
@@ -141,24 +141,24 @@
                     <div class="col-12">
                         <input type="radio" class="btn-check" name="sort-btn" id="product-id-sort-btn" value="ProductId"
                             autocomplete="off" checked onclick="sortItems('ProductId')">
-                        <label class="btn btn-outline-primary" for="product-id-sort-btn">Product Id</label>
+                        <label class="btn btn-primary" for="product-id-sort-btn">Product Id</label>
                         </input>
 
                         <input type="radio" class="btn-check" name="sort-btn" id="product-name-sort-btn"
                             value="ProductName" autocomplete="off" onclick="sortItems
                             ('ProductName')">
-                        <label class="btn btn-outline-primary" for="product-name-sort-btn">Product Name</label>
+                        <label class="btn btn-primary" for="product-name-sort-btn">Product Name</label>
                         </input>
 
                         <input type="radio" class="btn-check" name="sort-btn" id="product-price-sort-btn" value="Price"
                             autocomplete="off" />
-                        <label class="btn btn-outline-primary" for="product-price-sort-btn"
+                        <label class="btn btn-primary" for="product-price-sort-btn"
                             onclick="sortItems()">Product Price (Low to High)</label>
                         </input>
 
                         <input type="radio" class="btn-check" name="sort-btn" id="product-price-htl-sort-btn"
                             value="Price-htl" autocomplete="off" />
-                        <label class="btn btn-outline-primary" for="product-price-htl-sort-btn"
+                        <label class="btn btn-primary " for="product-price-htl-sort-btn"
                             onclick="sortItems('hl')">Product Price (High to Low)</label>
                         </input>
                     </div>

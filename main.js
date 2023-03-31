@@ -233,10 +233,12 @@ function updateData() {
                 case 0:
                     id = document.getElementById('hiddentproductid').value;
                     imagess = null;
-                    if (!document.getElementById('Image').files[0]) return [3 /*break*/, 2];
-                    return [4 /*yield*/, details.imageToBase64(document.getElementById('Image').files[0])];
+                    console.log(document.getElementById('update-Image').files[0]);
+                    if (!document.getElementById('update-Image').files[0]) return [3 /*break*/, 2];
+                    return [4 /*yield*/, details.imageToBase64(document.getElementById('update-Image').files[0])];
                 case 1:
                     imagess = _b.sent();
+                    console.log(imagess);
                     _b.label = 2;
                 case 2:
                     array = (_a = JSON.parse(localStorage.getItem("data"))) !== null && _a !== void 0 ? _a : [];
@@ -254,6 +256,7 @@ function updateData() {
                     });
                     localStorage.setItem("data", JSON.stringify(array));
                     displayData();
+                    document.querySelector("#closebtn2").click();
                     return [2 /*return*/];
             }
         });
